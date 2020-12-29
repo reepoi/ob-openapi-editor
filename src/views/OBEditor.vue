@@ -395,7 +395,6 @@
           @click="exportModalOpened('sampleJSON')"
           :disabled="!$store.state.currentFile"
           size="sm"
-          v-if="$store.state.viewerMode == 'Edit Mode'"
           >Create Sample JSON</b-button
         >
         <b-button
@@ -651,16 +650,25 @@ export default {
     setExportFile(fileToExportType) {
       let fileToExport = null;
       let exportModalHeader = "";
+      let fileName = this.$store.state.currentFile.fileName;
       if (fileToExportType === "taxonomy") {
         fileToExport = this.$store.state.currentFile.fullFileForExport;
         exportModalHeader = "Save as...";
       } else if (fileToExportType === "sampleJSON") {
-        fileToExport = miscUtilities.getSampleJSON(this.$store.state.currentFile.fileName, this.$store.state);
+        if (this.$store.state.viewerMode === "View Mode"){
+          fileToExport = {};
+          let fileItems = this.$store.state.loadedFiles[fileName]["file"];
+          this.sortedObjects.forEach(obj => { 
+            fileToExport[obj[0]] = miscUtilities.buildSampleJSON(obj[0], fileItems, this.$store.state);
+          });
+        } else {
+          fileToExport = miscUtilities.getSampleJSON(fileName, this.$store.state);
+        }
         exportModalHeader = "Create Sample JSON";
       }
       this.$store.commit("setFileToExport", {
         fileToExport: fileToExport,
-        fileToExportName: this.$store.state.currentFile.fileName,
+        fileToExportName: fileName,
         exportModalHeader: exportModalHeader
       });
     },

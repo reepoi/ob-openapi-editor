@@ -18,7 +18,7 @@
             v-b-modal.modal-edit-node
             :disabled="!$store.state.defnIsLocal"
           >Edit definition</b-button>
-          <b-button variant="primary" size="sm" @click="exportSampleJSON" v-if="$store.state.nodeParent == 'root' && $store.state.viewerMode == 'Edit Mode'">Create Sample JSON</b-button>
+          <b-button variant="primary" size="sm" @click="exportSampleJSON" v-if="$store.state.nodeParent == 'root'">Create Sample JSON</b-button>
           <b-button v-b-modal.modal-delete-node variant="danger" size="sm" v-if="$store.state.viewerMode == 'Edit Mode'">
             <span v-if="$store.state.nodeParent == 'root'">Delete</span>
             <span v-else>Remove</span>
